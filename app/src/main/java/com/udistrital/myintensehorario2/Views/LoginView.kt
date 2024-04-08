@@ -32,10 +32,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.udistrital.myintensehorario2.AppViews
 
 @Composable
-
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     Surface(modifier = Modifier.fillMaxSize()) {
 
         Column(
@@ -49,14 +50,14 @@ fun LoginScreen() {
                     .padding(horizontal = 10.dp)
             )
 
-            UserForm()
+            UserForm(navController)
         }
 
     }
 
 }
 @Composable
-fun UserForm(
+fun UserForm(navController: NavController
 ) {
     val email = rememberSaveable {
         mutableStateOf("")
@@ -96,7 +97,7 @@ fun UserForm(
         )
         SubmitButton(
             textId = "Log In", isOn = isSubmitOn,
-            onClick = { }
+            onClick = { navController.navigate(AppViews.homeScreen.route)}
         )
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -238,5 +239,5 @@ fun InputField(
 @Preview
 fun LoginScreenPreview() {
 
-    LoginScreen()
+    //LoginScreen()
 }
