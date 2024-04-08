@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "25347063178",
+    "project_id": "myintensehorario",
+    "storage_bucket": "myintensehorario.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25347063178:android:22a5f328dd7b174e4c9c73",
+        "android_client_info": {
+          "package_name": "com.udistrital.myintensehorario"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25347063178-6gf0iibumai8q71qjvng10skqe4qr5v5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udistrital.myintensehorario",
+            "certificate_hash": "6dc09a7130d5373bd2281657a0e7cb9a63203463"
+          }
+        },
+        {
+          "client_id": "25347063178-j3dsdgmg1u6pq6e8bets02g7flmehs70.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxHbJ8Px4aezzNqKa4FSO1riO2WR77kP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25347063178-j3dsdgmg1u6pq6e8bets02g7flmehs70.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
