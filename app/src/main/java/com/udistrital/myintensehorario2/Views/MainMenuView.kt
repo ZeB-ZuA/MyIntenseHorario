@@ -23,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
@@ -40,12 +40,12 @@ fun HomeScreen() {
         }
     ) {
         // Screen content
-        DashBoard()
+        DashBoard(navController)
     }
 
 }
 @Composable
-fun DashBoard() {
+fun DashBoard(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
             text = "DashBorad",
@@ -58,5 +58,6 @@ fun DashBoard() {
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen()
+    val navController = rememberNavController()
+    HomeScreen(navController)
 }
