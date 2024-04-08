@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
@@ -35,7 +36,14 @@ fun HomeScreen(navController: NavController) {
                     selected = false,
                     onClick = { /*TODO*/ }
                 )
-                // ...other drawer items
+                Divider()
+                NavigationDrawerItem(
+                    label = { Text(text = "My Settings") },
+                    icon = { Icon(Icons.Filled.Settings, contentDescription = "My schedules") },
+                    selected = false,
+                    onClick = { /*TODO*/ }
+                )
+                Divider()
             }
         }
     ) {
