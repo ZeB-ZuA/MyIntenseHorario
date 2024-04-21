@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -39,12 +40,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -328,6 +327,7 @@ fun GeneralSettingItem() {
 
 @Composable
 fun SupportOptionsUI(navController: NavController) {
+    var showDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -365,8 +365,11 @@ fun SupportOptionsUI(navController: NavController) {
                     contentDescription = stringResource(id = R.string.Privacy_Policy)
                 )
             },
-            mainText = stringResource(id = R.string.Privacy_Policy)
-        ) {}
+            mainText = stringResource(id = R.string.Privacy_Policy),
+            onClick = {
+                showDialog = true
+            }
+        )
         SupportItem(
             icon = {
                 Icon(
@@ -374,10 +377,46 @@ fun SupportOptionsUI(navController: NavController) {
                     contentDescription = stringResource(id = R.string.About)
                 )
             },
-            mainText = stringResource(id = R.string.About)
-        ) {}
+            mainText = stringResource(id = R.string.About),
+            onClick = {
+
+            }
+        )
+
+
+    }
+    if (showDialog) {
+        ShowDialog(onDismissRequest = { showDialog = false })
     }
 }
+
+@Composable
+fun ShowDialog(onDismissRequest: () -> Unit) {
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(text = "No hay privacidad, ya se tu numero de cuenta") },
+        text = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "\uD83D\uDD95",
+                    fontSize = 70.sp
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = onDismissRequest) {
+                Text("OK")
+            }
+        }
+    )
+}
+
+
+
 
 @Composable
 fun SupportItem(icon: @Composable () -> Unit, mainText: String, onClick: () -> Unit) {
