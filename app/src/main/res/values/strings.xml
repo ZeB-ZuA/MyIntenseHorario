@@ -1,3 +1,26 @@
 <resources>
-    <string name="app_name">MyIntenseHorario2</string>
+    <string name="app_name">MyIntenseHorario</string>
+    <string name="Log_In">Log In</string>
+    <string name="Password">Password</string>
+    <string name="Dont_have_an_account">Don\'t have an account?</string>
+    <string name="Sign_up">¡Sign up!</string>
+    <string name="registration">registration</string>
+    <string name="Name">Name</string>
+    <string name="Email">Email</string>
+    <string name="Settings">Settings</string>
+    <string name="Check_Your_Profile">Check Your Profile</string>
+    <string name="View">View</string>
+    <string name="General">General</string>
+    <string name="Support">Support</string>
+    <string name="Contact">Contact</string>
+    <string name="Feedback">Feedback</string>
+    <string name="Privacy_Policy">Privacy Policy</string>
+    <string name="About">About</string>
+    <string name="Language">Language</string>
+    <string name="Dark_Theme">Dark Theme</string>
+    <string name="Spanish">Spanish</string>
+    <string name="English">English</string>
+    <string name="Japanese">Japanese</string>
+    <string name="Notifications">Notifications</string>
+    Notifications
 </resources>

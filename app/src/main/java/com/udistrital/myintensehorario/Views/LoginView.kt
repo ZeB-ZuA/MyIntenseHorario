@@ -31,15 +31,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.udistrital.myintensehorario2.AppViews
+import androidx.navigation.compose.rememberNavController
+import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario2.R
 
 @Composable
@@ -55,7 +55,7 @@ fun LoginScreen(navController: NavController) {
             Image(painter = painterResource(id = R.drawable.logo), contentDescription = "logo")
             Spacer(Modifier.size(10.dp))
             Text(
-                text = "Log In",
+                text = stringResource(R.string.Log_In),
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(horizontal = 10.dp)
@@ -67,9 +67,9 @@ fun LoginScreen(navController: NavController) {
     }
 
 }
+
 @Composable
-fun UserForm(navController: NavController
-) {
+fun UserForm(navController: NavController) {
     val email = rememberSaveable {
         mutableStateOf("")
     }
@@ -104,19 +104,19 @@ fun UserForm(navController: NavController
             emailState = email
         )
         PwdInput(
-            pwdState = pwd, labelId = "Password", pwdVisible = isVisiblePwd
+            pwdState = pwd, labelId = stringResource(R.string.Password), pwdVisible = isVisiblePwd
         )
         SubmitButton(
-            textId = "Log In", isOn = isSubmitOn,
-            onClick = { navController.navigate(AppViews.homeScreen.route)}
+            textId = stringResource(id = R.string.Log_In), isOn = isSubmitOn,
+            onClick = { navController.navigate(AppViews.homeScreen.route) }
         )
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Don't have an account?")
+            Text(text = stringResource(id = R.string.Dont_have_an_account))
             Text(
-                text = "¡Sign up!",
+                text = stringResource(id = R.string.Sign_up),
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .clickable { showSignUpDialog.value = true },
@@ -125,7 +125,7 @@ fun UserForm(navController: NavController
         }
         if (showSignUpDialog.value) {
             AlertDialog(onDismissRequest = { showSignUpDialog.value = false },
-                title = { Text(text = "Registro") },
+                title = { Text(text = stringResource(id = R.string.registration)) },
                 text = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -135,10 +135,14 @@ fun UserForm(navController: NavController
                             emailState = signUpEmail
                         )
                         PwdInput(
-                            pwdState = signUpPwd, labelId = "Password", pwdVisible = isVisiblePwd
+                            pwdState = signUpPwd,
+                            labelId = stringResource(id = R.string.Password),
+                            pwdVisible = isVisiblePwd
                         )
                         InputField(
-                            valuesState = signUpName, labelId = "Name", keyboard = KeyboardType.Text
+                            valuesState = signUpName,
+                            labelId = stringResource(id = R.string.Name),
+                            keyboard = KeyboardType.Text
                         )
                     }
                 },
@@ -150,7 +154,7 @@ fun UserForm(navController: NavController
                         },
                         enabled = signUpEmail.value.isNotBlank() && signUpPwd.value.isNotBlank() && signUpName.value.isNotBlank()
                     ) {
-                        Text(text = "Sign up")
+                        Text(text = stringResource(id = R.string.Sign_up))
                     }
                 })
         }
@@ -220,7 +224,7 @@ fun PasswordVisibleIcon(pwdVisible: MutableState<Boolean>) {
 
 @Composable
 fun EmailInput(
-    emailState: MutableState<String>, labelId: String = "Email"
+    emailState: MutableState<String>, labelId: String = stringResource(id = R.string.Email)
 ) {
     InputField(
         valuesState = emailState, labelId = labelId, keyboard = KeyboardType.Email
@@ -249,6 +253,6 @@ fun InputField(
 @Composable
 @Preview
 fun LoginScreenPreview() {
-
-    //LoginScreen()
+    val navController = rememberNavController();
+    LoginScreen(navController)
 }

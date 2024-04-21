@@ -1,4 +1,4 @@
-package com.udistrital.myintensehorario2
+package com.udistrital.myintensehorario
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
