@@ -1,4 +1,4 @@
-package com.udistrital.myintensehorario2
+package com.udistrital.myintensehorario
 
 sealed class AppViews(val route: String) {
     object loginScreen : AppViews("login_screen")

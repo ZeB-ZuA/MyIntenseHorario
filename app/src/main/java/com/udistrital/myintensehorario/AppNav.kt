@@ -1,4 +1,4 @@
-package com.udistrital.myintensehorario2
+package com.udistrital.myintensehorario
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.udistrital.myh.Views.HomeScreen
 import com.udistrital.myh.Views.LoginScreen
-import com.udistrital.myintensehorario2.Views.SettingsScreen
+import com.udistrital.myintensehorario.Views.SettingsScreen
 
 
 @Composable

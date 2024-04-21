@@ -1,4 +1,4 @@
-package com.udistrital.myintensehorario2.ui.theme
+package com.udistrital.myintensehorario.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

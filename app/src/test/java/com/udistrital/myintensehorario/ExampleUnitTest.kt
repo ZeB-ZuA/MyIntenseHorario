@@ -1,4 +1,4 @@
-package com.udistrital.myintensehorario2
+package com.udistrital.myintensehorario
 
 import org.junit.Test
 
