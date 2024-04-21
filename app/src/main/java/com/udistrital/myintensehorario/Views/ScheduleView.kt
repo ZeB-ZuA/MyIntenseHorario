@@ -19,11 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-
 import androidx.navigation.NavController
-import com.udistrital.myintensehorario2.AppViews
+import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario2.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +37,7 @@ fun ScheduleScreen(navController: NavController) {
                 ),
                 title = {
                     Text(
-                        text = "Oficina",
+                        text = stringResource(id = R.string.Office),
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                     )

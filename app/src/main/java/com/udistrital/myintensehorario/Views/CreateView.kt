@@ -1,6 +1,6 @@
 package com.udistrital.myintensehorario2.Views
 
-import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,22 +25,18 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.udistrital.myh.Views.EmailInput
-import com.udistrital.myh.Views.InputField
-import com.udistrital.myh.Views.PwdInput
 import com.udistrital.myh.Views.SubmitButton
-import com.udistrital.myintensehorario2.AppViews
+import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario2.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +52,7 @@ fun CreateScreen(navController: NavController) {
                 ),
                 title = {
                     Text(
-                        text = "Crear horario",
+                        text = stringResource(id = R.string.Create_Schedule),
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                     )
@@ -75,23 +69,23 @@ fun CreateScreen(navController: NavController) {
 
                 )
         }
-    ){ innerPadding ->
+    ) { innerPadding ->
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier.padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
 
-            ) {
+                ) {
                 Spacer(Modifier.size(10.dp))
                 Text(
                     color = colorResource(R.color.green),
                     fontSize = 20.sp,
-                    text = "Nuevo horario",
+                    text = stringResource(id = R.string.New_Schedule),
                     modifier = Modifier
                         .align(Alignment.Start)
                         .padding(10.dp)
                 )
-                UserForm(navController = navController, innerPadding= innerPadding)
+                UserForm(navController = navController, innerPadding = innerPadding)
             }
         }
 
@@ -109,7 +103,7 @@ fun UserForm(navController: NavController, innerPadding: PaddingValues) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
-            text = "Nombre",
+            text = stringResource(id = R.string.Name),
             style = MaterialTheme.typography.bodyLarge
         )
 
@@ -117,7 +111,7 @@ fun UserForm(navController: NavController, innerPadding: PaddingValues) {
             modifier = Modifier.fillMaxWidth(),
             value = scheduleName,
             onValueChange = { scheduleName = it },
-            placeholder = { Text(text = "e.g. Oficina") },
+            placeholder = { Text(text = stringResource(id = R.string.e_g__Oficina)) },
         )
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -125,12 +119,12 @@ fun UserForm(navController: NavController, innerPadding: PaddingValues) {
         ) {
             val isSubmitOn = false
             SubmitButton(
-                textId = "Guardar", isOn = isSubmitOn,
-                onClick = { navController.navigate(AppViews.homeScreen.route)}
+                textId = stringResource(id = R.string.Save), isOn = isSubmitOn,
+                onClick = { navController.navigate(AppViews.homeScreen.route) }
             )
             SubmitButton(
-                textId = "Cancelar", isOn = true,
-                onClick = { navController.navigate(AppViews.homeScreen.route)}
+                textId = stringResource(id = R.string.Cancel), isOn = true,
+                onClick = { navController.navigate(AppViews.homeScreen.route) }
             )
         }
     }

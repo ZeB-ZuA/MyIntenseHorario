@@ -22,12 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.udistrital.myintensehorario2.AppViews
+import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario2.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +43,7 @@ fun ScheduleListScreen(navController: NavController) {
                 ),
                 title = {
                     Text(
-                        text = "Lista de horarios",
+                        text = stringResource(id = R.string.Schedule_List),
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                     )
@@ -86,7 +87,7 @@ fun Card(){
             .fillMaxWidth()
     ) {
         Text(
-            text = "Oficina",
+            text = stringResource(id = R.string.Office),
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             modifier = Modifier
@@ -94,7 +95,7 @@ fun Card(){
             textAlign = TextAlign.Center,
         )
         Text(
-            text = "Lunes",
+            text = stringResource(id = R.string.Monday),
             modifier = Modifier
                 .padding(16.dp),
             textAlign = TextAlign.Center,

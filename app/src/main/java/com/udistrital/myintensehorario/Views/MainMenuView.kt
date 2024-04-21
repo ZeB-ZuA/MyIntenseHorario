@@ -16,11 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
@@ -28,6 +30,8 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -35,14 +39,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario.Views.SettingsScreen
+import com.udistrital.myintensehorario2.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -55,15 +66,15 @@ fun HomeScreen(navController: NavController) {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text("My Intense Horario🔥🔥🔥", modifier = Modifier.padding(16.dp))
+                Text(stringResource(id = R.string.app_name), modifier = Modifier.padding(16.dp))
                 Divider()
                 NavigationDrawerItem(
                     shape = RectangleShape,
-                    label = { Text(text = "My schedule") },
+                    label = { Text(text = stringResource(id = R.string.My_schedule)) },
                     icon = {
                         Icon(
                             Icons.Filled.CalendarToday,
-                            contentDescription = "My schedules"
+                            contentDescription = stringResource(id = R.string.My_schedules)
                         )
                     },
                     selected = currentScreen.value == "dashboard",
@@ -75,7 +86,7 @@ fun HomeScreen(navController: NavController) {
                 Divider()
                 NavigationDrawerItem(
                     shape = RectangleShape,
-                    label = { Text(text = "My Settings") },
+                    label = { Text(text = stringResource(id = R.string.My_settings)) },
                     icon = { Icon(Icons.Filled.Settings, contentDescription = "My schedules") },
                     selected = currentScreen.value == "settings",
                     onClick = {
@@ -96,6 +107,7 @@ fun HomeScreen(navController: NavController) {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashBoard(navController: NavController) {
         Column (
@@ -136,14 +148,14 @@ fun DashBoard(navController: NavController) {
 
             ) {
                 Text(
-                    text = "Hola, User",
+                    text = stringResource(id = R.string.Hi_User),
                     color =  colorResource(R.color.green),
                     textAlign = TextAlign.Left,
                     fontSize = 30.sp,
                     fontWeight = FontWeight(600),
                 )
                 Text(
-                    text = "Clima",
+                    text = stringResource(id = R.string.Weather),
                     color =  colorResource(R.color.greenLight),
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight(600)
@@ -175,7 +187,7 @@ fun DashBoard(navController: NavController) {
                         .height(40.dp)) {
                     Text(
                         fontSize = 17.sp,
-                        text = "Crear horario",
+                        text = stringResource(id = R.string.Create_Schedule),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -189,7 +201,7 @@ fun DashBoard(navController: NavController) {
                 ) {
                     Text(
                         fontSize = 17.sp,
-                        text = "Ver horarios",
+                        text = stringResource(id = R.string.See_schedules),
                         textAlign = TextAlign.Center
                     )
                 }
