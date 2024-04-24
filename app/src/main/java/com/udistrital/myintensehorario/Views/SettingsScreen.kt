@@ -62,7 +62,7 @@ fun SettingsScreen(navController: NavController) {
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun SettingsScreenPreview() {
     val navController = rememberNavController()
     SettingsScreen(navController)
@@ -195,18 +195,19 @@ fun GeneralSettingNotifications(icon: @Composable () -> Unit) {
         elevation = cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+            modifier = Modifier.padding(vertical = 3.dp, horizontal = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            icon() // Icono al principio de la tarjeta
+            icon()
             Spacer(modifier = Modifier.width(14.dp))
             Text(
-                text = "Notifications",
+                modifier = Modifier.padding(horizontal = 10.dp),
+                text = stringResource(id = R.string.Notifications),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
             )
-            Spacer(Modifier.weight(1f)) // Esto empujará el Switch hacia la derecha
+            Spacer(Modifier.weight(1f))
             Switch(
                 checked = checked,
                 onCheckedChange = { checked = it }
@@ -225,18 +226,19 @@ fun GeneralSettingTheme(icon: @Composable () -> Unit) {
         elevation = cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+            modifier = Modifier.padding(vertical = 3.dp, horizontal = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            icon() // Icono al principio de la tarjeta
+            icon()
             Spacer(modifier = Modifier.width(14.dp))
             Text(
-                text = "Dark Theme",
+                modifier = Modifier.padding(horizontal = 10.dp),
+                text = stringResource(id = R.string.Dark_Theme),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
             )
-            Spacer(Modifier.weight(1f)) // Esto empujará el Switch hacia la derecha
+            Spacer(Modifier.weight(1f))
             Switch(
                 checked = checked,
                 onCheckedChange = { checked = it }

@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.udistrital.myh.Views.HomeScreen
 import com.udistrital.myh.Views.LoginScreen
+import com.udistrital.myintensehorario.ViewModel.LoginViewModel
 
 import com.udistrital.myintensehorario2.Views.CreateScreen
 import com.udistrital.myintensehorario2.Views.ScheduleListScreen
@@ -20,7 +21,7 @@ fun AppNav() {
 
     NavHost(navController = navController, startDestination = AppViews.loginScreen.route) {
         composable(route = AppViews.loginScreen.route) {
-            LoginScreen(navController)
+            LoginScreen(navController, LoginViewModel())
         }
 
         composable(route = AppViews.homeScreen.route) {
