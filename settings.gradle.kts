@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MyIntenseHorario2"
+rootProject.name = "MyIntenseHorario"
 include(":app")
  

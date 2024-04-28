@@ -53,7 +53,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario.Views.SettingsScreen
-import com.udistrital.myintensehorario2.R
+import com.udistrital.myintensehorario.R
 import kotlinx.coroutines.launch
 
 @Composable

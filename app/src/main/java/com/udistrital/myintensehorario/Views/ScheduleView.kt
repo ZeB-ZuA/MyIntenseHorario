@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.udistrital.myintensehorario.AppViews
-import com.udistrital.myintensehorario2.R
+import com.udistrital.myintensehorario.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

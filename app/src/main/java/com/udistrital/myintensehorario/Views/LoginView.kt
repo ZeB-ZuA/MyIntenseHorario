@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -48,11 +49,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.udistrital.myintensehorario.AppViews
+import com.udistrital.myintensehorario.Model.User
+import com.udistrital.myintensehorario.R
+import com.udistrital.myintensehorario.Repository.UserRepository
+import com.udistrital.myintensehorario.Service.UserService
 import com.udistrital.myintensehorario.ViewModel.LoginViewModel
-import com.udistrital.myintensehorario2.R
 
 @Composable
-fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
+fun LoginScreen(navController: NavController,) {
+    val userService = UserService()
+    val viewModel = LoginViewModel(userService)
     Surface(
         modifier = Modifier
             .background(colorResource(R.color.orange))
@@ -86,6 +92,8 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
     val signUpEmail: String by viewModel.signUpEmail.observeAsState(initial = "")
     val signUpName: String by viewModel.signUpName.observeAsState(initial = "")
     val signUpPwd: String by viewModel.signUpPwd.observeAsState(initial = "")
+    val signUpResult by viewModel.signUpResult.observeAsState(initial = false)
+    val logInResult by viewModel.logInResult.observeAsState(initial = false)
     val isVisiblePwd = rememberSaveable {
         mutableStateOf(false)
     }
@@ -93,6 +101,17 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
         email.trim().isNotEmpty() && pwd.trim().isNotEmpty()
     }
     val showSignUpDialog = remember { mutableStateOf(false) }
+    LaunchedEffect(signUpResult) {
+        if (signUpResult) {
+            navController.navigate(AppViews.homeScreen.route)
+        }
+    }
+
+    LaunchedEffect (logInResult){
+        if (logInResult){
+            navController.navigate(AppViews.homeScreen.route)
+        }
+    }
 
 
 
@@ -112,7 +131,9 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
         )
         SubmitButton(
             textId = stringResource(id = R.string.Log_In), isOn = isSubmitOn,
-            onClick = { navController.navigate(AppViews.homeScreen.route) }
+            onClick = {
+           viewModel.logIn()
+          }
         )
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -158,13 +179,18 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
                             keyboard = KeyboardType.Text,
                             onValueChange = { viewModel.setSignUpName(it) }
                         )
+                        GoogleLoginButton(){}
                     }
                 },
                 confirmButton = {
                     Button(
                         onClick = {
                             showSignUpDialog.value = false
-
+                            viewModel.printSignUp()
+                            viewModel.signUp()
+                            viewModel.setSignUpEmail("")
+                            viewModel.setSignUpPwd("")
+                            viewModel.setSignUpName("")
                         },
                         enabled = signUpEmail.isNotBlank() && signUpPwd.isNotBlank() && signUpName.isNotBlank()
                     ) {
@@ -322,5 +348,5 @@ fun InputField(
 @Preview(showBackground = true, showSystemUi = true)
 fun LoginScreenPreview() {
     val navController = rememberNavController();
-    LoginScreen(navController, LoginViewModel())
+    LoginScreen(navController)
 }

@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.udistrital.myintensehorario2.R
+import com.udistrital.myintensehorario.R
 
 
 @Composable
