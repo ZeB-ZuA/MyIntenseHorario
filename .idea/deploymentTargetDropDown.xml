@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="LoginScreenPreview">
+        <State />
+      </entry>
       <entry key="SettingsScreenPreview">
         <State>
           <runningDeviceTargetSelectedWithDropDown>
@@ -19,20 +22,7 @@
         </State>
       </entry>
       <entry key="app">
-        <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="ZY22F5FL4D" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-21T22:03:53.871376100Z" />
-        </State>
+        <State />
       </entry>
     </value>
   </component>

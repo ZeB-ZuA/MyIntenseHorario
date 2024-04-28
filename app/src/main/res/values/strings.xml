@@ -7,6 +7,8 @@
     <string name="registration">registration</string>
     <string name="Name">Name</string>
     <string name="Email">Email</string>
+    <string name="Continue_with_google">Continue with Google</string>
+    <string name="Or">OR</string>
     <string name="Settings">Settings</string>
     <string name="Check_Your_Profile">Check Your Profile</string>
     <string name="View">View</string>
