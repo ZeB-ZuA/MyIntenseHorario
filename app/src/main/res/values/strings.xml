@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">🔥🔥🔥MyIntenseHorario🔥🔥🔥</string>
+    <string name="app_name">🔥MyIntenseHorario</string>
     <string name="Log_In">Log In</string>
     <string name="Password">Password</string>
     <string name="Dont_have_an_account">Don\'t have an account?</string>
@@ -40,4 +40,6 @@
     <string name="Monday">Monday</string>
     <string name="Materia">Materia</string>
     <string name="Hora">Hora</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="schedule">Schedule</string>
 </resources>

@@ -1,11 +1,14 @@
 package com.udistrital.myintensehorario2.Views
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CardDefaults
@@ -22,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -79,28 +83,63 @@ fun ScheduleListScreen(navController: NavController) {
 fun Card(){
     ElevatedCard(
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.yellow),
+            containerColor = colorResource(R.color.greenLight),
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
+            defaultElevation = 8.dp
         ),
         modifier = Modifier
-            .padding(10.dp)
+            .padding(16.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = stringResource(id = R.string.Office),
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
+        Row(
             modifier = Modifier
                 .padding(16.dp),
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = stringResource(id = R.string.Monday),
-            modifier = Modifier
-                .padding(16.dp),
-            textAlign = TextAlign.Center,
-        )
+        ) {
+            Icon(
+                tint = colorResource(id = R.color.black),
+                painter = painterResource(R.drawable.calendar),
+                contentDescription = "" )
+            Text(
+                text = stringResource(id = R.string.Office),
+                color = Color.Black,
+                fontWeight = FontWeight.Black,
+                fontSize = 22.sp,
+                textAlign = TextAlign.Center,
+            )
+
+            Spacer(Modifier.width(180.dp))
+
+            Icon(
+                    tint = colorResource(id = R.color.black),
+                    painter = painterResource(R.drawable.edit_calendar),
+                    contentDescription = "" )
+            Spacer(Modifier.width(10.dp))
+            Icon(
+                    tint = colorResource(id = R.color.black),
+                    painter = painterResource(R.drawable.delete),
+                    contentDescription = "" )
+
+        }
+
+        Row {
+
+            Text(
+                text = stringResource(id = R.string.Monday),
+                modifier = Modifier
+                    .padding(16.dp),
+                textAlign = TextAlign.Center,
+            )
+
+            Text(
+                text = stringResource(id = R.string.tuesday),
+                modifier = Modifier
+                    .padding(16.dp),
+                textAlign = TextAlign.Center,
+            )
+        }
+
     }
 }
+
+

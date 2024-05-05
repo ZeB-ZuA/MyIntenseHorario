@@ -28,12 +28,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -55,6 +58,7 @@ import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario.Views.SettingsScreen
 import com.udistrital.myintensehorario.R
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.JdkConstants.FontStyle
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -62,39 +66,28 @@ fun HomeScreen(navController: NavController) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text(stringResource(id = R.string.app_name), modifier = Modifier.padding(16.dp))
-                Divider()
-                NavigationDrawerItem(
-                    shape = RectangleShape,
-                    label = { Text(text = stringResource(id = R.string.My_schedule)) },
-                    icon = {
-                        Icon(
-                            Icons.Filled.CalendarToday,
-                            contentDescription = stringResource(id = R.string.My_schedules)
-                        )
-                    },
-                    selected = currentScreen.value == "dashboard",
-                    onClick = {
-                        currentScreen.value = "dashboard"
-                        scope.launch { drawerState.close() }
-                    }
-                )
-                Divider()
-                NavigationDrawerItem(
-                    shape = RectangleShape,
-                    label = { Text(text = stringResource(id = R.string.My_settings)) },
-                    icon = { Icon(Icons.Filled.Settings, contentDescription = "My schedules") },
-                    selected = currentScreen.value == "settings",
-                    onClick = {
-                        currentScreen.value = "settings"
-                        scope.launch { drawerState.close() }
-                    }
-                )
-                Divider()
+                Text(stringResource(id = R.string.app_name),
+                    fontSize = 22.sp,
+                    modifier = Modifier.padding(26.dp))
+                MyNavigationDrawerItem(
+                    stringResource(id = R.string.My_schedule), Icons.Filled.CalendarToday,
+                    stringResource(id = R.string.My_schedules), currentScreen.value == "dashboard"
+                ) {
+                    currentScreen.value = "dashboard"
+                    scope.launch { drawerState.close() }
+                }
+                MyNavigationDrawerItem(
+                    stringResource(id = R.string.My_settings), Icons.Filled.Settings,
+                    contentDescription = "My schedules", currentScreen.value == "settings"
+                ) {
+                    currentScreen.value = "settings"
+                    scope.launch { drawerState.close() }
+                }
             }
         }
     ) {
@@ -209,14 +202,35 @@ fun DashBoard(navController: NavController) {
         }
 }
 
-fun Text(text: Char) {
-    TODO("Not yet implemented")
-}
-
 
 @Composable
 @Preview
 fun HomeScreenPreview() {
     val navController = rememberNavController()
     HomeScreen(navController)
+}
+
+@Composable
+fun MyNavigationDrawerItem(
+    label: String,
+    icon: ImageVector,
+    contentDescription: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    NavigationDrawerItem(
+        colors = NavigationDrawerItemDefaults.colors(
+            selectedContainerColor = colorResource(id = R.color.greenLight),
+        ),
+        modifier = Modifier.padding(6.dp),
+        label = { Text(text = label, fontWeight = FontWeight(500)) },
+        icon = {
+            Icon(
+                icon,
+                contentDescription = contentDescription
+            )
+        },
+        selected = selected,
+        onClick = onClick
+    )
 }

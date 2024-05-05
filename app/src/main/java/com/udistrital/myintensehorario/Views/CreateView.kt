@@ -1,15 +1,15 @@
 package com.udistrital.myintensehorario2.Views
 
-
 import android.app.TimePickerDialog
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -67,7 +67,7 @@ fun CreateScreen(navController: NavController) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate(AppViews.homeScreen.route) }) {
+                    IconButton(onClick = { navController.navigate(AppViews.schedulListScreen.route) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Localized description",
@@ -101,7 +101,7 @@ fun UserForm(navController: NavController) {
     var scheduleName by rememberSaveable { mutableStateOf("") }
 
     val items: Array<String> = arrayOf(
-        "Lunes",  "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"
+        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
     )
 
     Column(
@@ -141,7 +141,7 @@ fun CheckboxDays( day: String){
     val hour = calendar[Calendar.HOUR_OF_DAY]
     val minute = calendar[Calendar.MINUTE]
     val time = remember {
-        mutableStateOf("")
+        mutableStateOf("00:00")
     }
     val timePickerDialog = TimePickerDialog(
         context, { _, hour: Int, minute: Int ->
@@ -163,34 +163,32 @@ fun CheckboxDays( day: String){
         Column {
             Row() {
                 Box(modifier = Modifier
-                    .padding(7.dp)
-                    .width(90.dp)
-                    .background(Color.LightGray)
+                    .padding(1.dp)
+                    .width(95.dp)
                 ){
                     Column {
-                        Text(
-                            text = time.value
-                        )
-                        Spacer(Modifier.size(3.dp))
-                        Text(
-                            text = time.value
-                        )
+                        Button(
+                            contentPadding =  PaddingValues(top = 0.dp, bottom = 0.dp, start = 25.dp, end = 25.dp ),
+                            modifier = Modifier.height(26.dp).padding(0.dp),
+                            onClick = { timePickerDialog.show() }) {
+                            Text(text = time.value)
+                        }
+                        Spacer(Modifier.size(5.dp))
+                        Button(
+                            contentPadding =  PaddingValues(top = 0.dp, bottom = 0.dp, start = 25.dp, end = 25.dp ),
+                            modifier = Modifier.height(26.dp).padding(0.dp),
+                            onClick = { timePickerDialog.show() }) {
+                            Text(text = time.value)
+                        }
                     }
                 }
-
-                Spacer(Modifier.size(10.dp))
+                Spacer(Modifier.size(8.dp))
                 TextField(
                     modifier = Modifier.width(290.dp),
                     value = scheduleName,
                     onValueChange = { scheduleName = it },
                     placeholder = { Text(text = stringResource(id = R.string.Materia)) },
                 )
-            }
-            Button(onClick = { timePickerDialog.show() }) {
-                Text(text = "Hora inicio")
-            }
-            Button(onClick = { timePickerDialog.show() }) {
-                Text(text = "Hora final")
             }
         }
     }
