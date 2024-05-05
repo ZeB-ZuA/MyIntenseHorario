@@ -1,33 +1,68 @@
 package com.udistrital.myintensehorario2.Views
 
+import android.app.TimePickerDialog
+import android.text.Layout.Alignment
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableChipColors
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario.R
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(navController: NavController) {
+    val items: Array<String> = arrayOf(
+        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+    )
     Scaffold(
         topBar = {
             TopAppBar(
@@ -37,13 +72,13 @@ fun ScheduleScreen(navController: NavController) {
                 ),
                 title = {
                     Text(
-                        text = stringResource(id = R.string.Office),
+                        text = stringResource(R.string.schedule),
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate(AppViews.homeScreen.route) }) {
+                    IconButton(onClick = { navController.navigate(AppViews.schedulListScreen.route) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Localized description",
@@ -57,11 +92,95 @@ fun ScheduleScreen(navController: NavController) {
     ){ innerPadding ->
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.padding(innerPadding),
+                modifier = Modifier
+                    .padding(20.dp)
+                    .verticalScroll(rememberScrollState()),
             ) {
-                Spacer(Modifier.size(10.dp))
+                Spacer(Modifier.size(50.dp))
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = stringResource(R.string.Office),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                )
+                items.forEach { days ->
+                    ViewDays(days)
+                    }
+
+                }
+
             }
 
         }
 
-    }}
+    }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ViewDays( day: String){
+   // var selected = remember { mutableStateOf(false) }
+    var selected by remember { mutableStateOf(false) }
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        FilterChip(
+            modifier = Modifier
+                .fillMaxWidth(),
+            onClick = { selected = !selected },
+            label = {
+                Text(day)
+            },
+            colors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = colorResource(id = R.color.green)
+            ),
+            selected = selected,
+            leadingIcon = if (selected) {
+                {
+                    Icon(
+                        imageVector = Icons.Filled.Done,
+                        contentDescription = "Done icon",
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            } else {
+                null
+            },
+        )
+    }
+    if(selected) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(1.dp)
+                    .border(BorderStroke(1.dp, colorResource(id = R.color.green))),
+
+                ){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
+                 Column {
+                        Text(text = "01:00 pm")
+                        Spacer(Modifier.size(3.dp))
+                        Text(text =  "03:00 pm")
+                 }
+                Spacer(Modifier.size(10.dp))
+                Text(text = "Fisica")
+                }
+
+
+            }
+            Spacer(Modifier.size(10.dp))
+        }
+    }
+}
+
+
+
+

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">🔥🔥🔥MyIntenseHorario🔥🔥🔥</string>
+    <string name="app_name">🔥MyIntenseHorario</string>
     <string name="Log_In">Log In</string>
     <string name="Password">Password</string>
     <string name="Dont_have_an_account">Don\'t have an account?</string>
@@ -26,7 +26,7 @@
     <string name="Notifications">Notifications</string>
     <string name="Create_Schedule">Create Schedule</string>
     <string name="New_Schedule">New Schedule</string>
-    <string name="e.g._Oficina">e.g. Office</string>
+    <string name="e.g._Oficina">Universidad</string>
     <string name="Save">Save</string>
     <string name="Cancel">Cancel</string>
     <string name="My_schedule">My schedule</string>
@@ -38,4 +38,8 @@
     <string name="Schedule_List">Schedule List</string>
     <string name="Office">Office</string>
     <string name="Monday">Monday</string>
+    <string name="Materia">Materia</string>
+    <string name="Hora">Hora</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="schedule">Schedule</string>
 </resources>
