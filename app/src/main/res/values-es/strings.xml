@@ -38,4 +38,8 @@
     <string name="Schedule_List">Lista de horarios</string>
     <string name="Office">Oficina</string>
     <string name="Monday">Lunes</string>
+    <string name="Materia">Subject</string>
+    <string name="Hora">Hour</string>
+    <string name="tuesday">Martes</string>
+    <string name="schedule">Horario</string>
 </resources>

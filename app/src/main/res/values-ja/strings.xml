@@ -38,4 +38,8 @@
     <string name="Schedule_List">スケジュールリスト</string>
     <string name="Office">オフィス</string>
     <string name="Monday">月曜日</string>
+    <string name="Materia">事</string>
+    <string name="Hora">時</string>
+    <string name="tuesday">火曜日</string>
+    <string name="schedule">時刻表</string>
 </resources>
