@@ -66,7 +66,9 @@ fun ScheduleListScreen(navController: NavController) {
                 modifier = Modifier.padding(innerPadding),
             ) {
                 Spacer(Modifier.size(10.dp))
-                Card()
+                Surface(onClick = {  navController.navigate(AppViews.scheduleScreen.route) }) {
+                    Card()
+                }
         }
 
     }
