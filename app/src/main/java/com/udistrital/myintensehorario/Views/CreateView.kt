@@ -1,6 +1,7 @@
 package com.udistrital.myintensehorario2.Views
 
 import android.app.TimePickerDialog
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,17 +43,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.udistrital.myh.Views.SubmitButton
 import com.udistrital.myintensehorario.AppViews
+import com.udistrital.myintensehorario.Model.Day
+import com.udistrital.myintensehorario.Model.Enums.DaysEnum
+import com.udistrital.myintensehorario.Model.Task
 import com.udistrital.myintensehorario.R
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateScreen(navController: NavController) {
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -62,8 +68,7 @@ fun CreateScreen(navController: NavController) {
                 title = {
                     Text(
                         text = stringResource(id = R.string.Create_Schedule),
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp)
+                        modifier = Modifier.padding(horizontal = 10.dp)
                     )
                 },
                 navigationIcon = {
@@ -74,35 +79,36 @@ fun CreateScreen(navController: NavController) {
                             tint = Color.White
                         )
                     }
-                },
-
-                )
+                }
+            )
         }
     ) { innerPadding ->
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .padding(innerPadding)
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-
-                ) {
+            ) {
                 Spacer(Modifier.size(10.dp))
                 UserForm(navController)
             }
         }
-
     }
+}
 
 
+@Composable
+@Preview(showBackground = true, showSystemUi = true)
+fun CreateScreenPreview() {
+    val navController = rememberNavController()
+    CreateScreen(navController)
 }
 
 @Composable
 fun UserForm(navController: NavController) {
     var scheduleName by rememberSaveable { mutableStateOf("") }
-
-    val items: Array<String> = arrayOf(
-        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-    )
+    val items = DaysEnum.values().toList()
 
     Column(
         modifier = Modifier.padding(10.dp),
@@ -120,82 +126,58 @@ fun UserForm(navController: NavController) {
             placeholder = { Text(text = stringResource(id = R.string.e_g__Oficina)) },
         )
 
-        items.forEach { days ->
-            CheckboxDays( days)
+        items.forEach { day ->
+            CheckboxDays(day.toString())
         }
 
-
         Buttons(navController)
-
     }
 }
 
-
-
 @Composable
-fun CheckboxDays( day: String){
-    var scheduleName by rememberSaveable { mutableStateOf("") }
+fun CheckboxDays(day: String) {
+    var taskName by rememberSaveable { mutableStateOf("") }
+    var taskDescription by rememberSaveable { mutableStateOf("") }
     val checked = remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    val calendar = Calendar.getInstance();
-    val hour = calendar[Calendar.HOUR_OF_DAY]
-    val minute = calendar[Calendar.MINUTE]
-    val time = remember {
-        mutableStateOf("00:00")
-    }
-    val timePickerDialog = TimePickerDialog(
-        context, { _, hour: Int, minute: Int ->
-            time.value = "$hour:$minute"
-        }, hour, minute, false
-    )
+    val tasks = remember { mutableStateListOf<Pair<String, String>>() }
+
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Checkbox(
             checked = checked.value,
             onCheckedChange = { checked.value = it },
         )
         Text(day)
     }
-    if(checked.value) {
+
+    if (checked.value) {
         Column {
-            Row() {
-                Box(modifier = Modifier
-                    .padding(1.dp)
-                    .width(95.dp)
-                ){
-                    Column {
-                        Button(
-                            contentPadding =  PaddingValues(top = 0.dp, bottom = 0.dp, start = 25.dp, end = 25.dp ),
-                            modifier = Modifier.height(26.dp).padding(0.dp),
-                            onClick = { timePickerDialog.show() }) {
-                            Text(text = time.value)
-                        }
-                        Spacer(Modifier.size(5.dp))
-                        Button(
-                            contentPadding =  PaddingValues(top = 0.dp, bottom = 0.dp, start = 25.dp, end = 25.dp ),
-                            modifier = Modifier.height(26.dp).padding(0.dp),
-                            onClick = { timePickerDialog.show() }) {
-                            Text(text = time.value)
-                        }
-                    }
-                }
-                Spacer(Modifier.size(8.dp))
-                TextField(
-                    modifier = Modifier.width(290.dp),
-                    value = scheduleName,
-                    onValueChange = { scheduleName = it },
-                    placeholder = { Text(text = stringResource(id = R.string.Materia)) },
+            tasks.forEachIndexed { index, task ->
+                TaskRow(
+                    taskName = task.first,
+                    taskDescription = task.second,
+                    onTaskNameChange = { newName ->
+                        tasks[index] = tasks[index].copy(first = newName)
+                    },
+                    onTaskDescriptionChange = { newDescription ->
+                        tasks[index] = tasks[index].copy(second = newDescription)
+                    },
+                    onRemoveTask = { tasks.removeAt(index) }
                 )
+            }
+            Button(onClick = {
+                tasks.add(Pair("", ""))
+            }) {
+                Text(text = "+")
             }
         }
     }
 }
 
 @Composable
-fun Buttons(navController: NavController){
+fun Buttons(navController: NavController) {
     val isSubmitOn = false
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -213,4 +195,86 @@ fun Buttons(navController: NavController){
     ) {
         Text(text = stringResource(id = R.string.Cancel))
     }
+}
+
+@Composable
+fun TaskRow(
+    taskName: String,
+    taskDescription: String,
+    onTaskNameChange: (String) -> Unit,
+    onTaskDescriptionChange: (String) -> Unit,
+    onRemoveTask: () -> Unit
+) {
+    var startTime by rememberSaveable { mutableStateOf("00:00") }
+    var endTime by rememberSaveable { mutableStateOf("00:00") }
+    val context = LocalContext.current
+
+    val startTimePickerDialog = createTimePickerDialog(context, startTime) { time ->
+        startTime = time
+    }
+
+    val endTimePickerDialog = createTimePickerDialog(context, endTime) { time ->
+        endTime = time
+    }
+
+    Row {
+        Box(
+            modifier = Modifier
+                .padding(1.dp)
+                .width(95.dp)
+        ) {
+            Column {
+                Button(
+                    contentPadding = PaddingValues(0.dp),
+                    modifier = Modifier
+                        .height(26.dp)
+                        .padding(0.dp),
+                    onClick = { startTimePickerDialog.show() }
+                ) {
+                    Text(text = startTime)
+                }
+                Spacer(Modifier.size(5.dp))
+                Button(
+                    contentPadding = PaddingValues(0.dp),
+                    modifier = Modifier
+                        .height(26.dp)
+                        .padding(0.dp),
+                    onClick = { endTimePickerDialog.show() }
+                ) {
+                    Text(text = endTime)
+                }
+            }
+        }
+        Spacer(Modifier.size(8.dp))
+        Column {
+            TextField(
+                modifier = Modifier.width(290.dp),
+                value = taskName,
+                onValueChange = onTaskNameChange,
+                placeholder = { Text(text = stringResource(id = R.string.Materia)) },
+            )
+            TextField(
+                modifier = Modifier.width(290.dp),
+                value = taskDescription,
+                onValueChange = onTaskDescriptionChange,
+                placeholder = { Text(text = "Description") },
+            )
+            Button(onClick = onRemoveTask) {
+                Text(text = "Remove")
+            }
+        }
+    }
+}
+
+fun createTimePickerDialog(
+    context: Context,
+    initialTime: String,
+    onTimeSet: (String) -> Unit
+): TimePickerDialog {
+    val (initialHour, initialMinute) = initialTime.split(":").map { it.toInt() }
+    return TimePickerDialog(
+        context, { _, selectedHour: Int, selectedMinute: Int ->
+            onTimeSet(String.format("%02d:%02d", selectedHour, selectedMinute))
+        }, initialHour, initialMinute, true
+    )
 }
