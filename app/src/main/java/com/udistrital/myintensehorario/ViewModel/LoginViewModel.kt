@@ -1,10 +1,18 @@
 package com.udistrital.myintensehorario.ViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.Firebase
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.Service.UserService
+import kotlinx.coroutines.launch
 
 class LoginViewModel(private val userService: UserService? = null) : ViewModel() {
     private val _email = MutableLiveData<String>()
@@ -22,9 +30,22 @@ class LoginViewModel(private val userService: UserService? = null) : ViewModel()
     private val _logInResult = MutableLiveData<Boolean>()
     val logInResult: LiveData<Boolean> = _logInResult
 
+    private val auth: FirebaseAuth = Firebase.auth
+
+
+    fun googleLogIn(credential: AuthCredential, onSuccess: () -> Unit) {
+        userService?.googleLogIn(credential)?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                onSuccess()
+            } else {
+                // Maneja el error aquí
+            }
+        }
+    }
+
     fun signUp() {
         val user = User("", _signUpName.value!!, _signUpEmail.value!!, _signUpPwd.value!!)
-        userService?.singUp(user)?.addOnCompleteListener { task ->
+        userService?.signUp(user)?.addOnCompleteListener { task ->
             _signUpResult.value = task.isSuccessful
         }
     }
@@ -63,9 +84,8 @@ class LoginViewModel(private val userService: UserService? = null) : ViewModel()
         _signUpPwd.value = signUpPwd
     }
 
-    fun signUp(user: User) {
-        userService?.singUp(user)
-    }
+
+
 
 
 }

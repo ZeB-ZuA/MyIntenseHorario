@@ -13,7 +13,20 @@
           "package_name": "com.udistrital.myintensehorario"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "999766775802-9dnqqg0mmsvqp433m3melhatvs2qgdbq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udistrital.myintensehorario",
+            "certificate_hash": "5e193764bee62c923838ae5a1607f45b415abb18"
+          }
+        },
+        {
+          "client_id": "999766775802-okvfs44kbt5fu6q5s995thgelfl5r8qb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAqf2HY3DFktTaD6tduX4QggBHg_wamQ_4"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999766775802-okvfs44kbt5fu6q5s995thgelfl5r8qb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

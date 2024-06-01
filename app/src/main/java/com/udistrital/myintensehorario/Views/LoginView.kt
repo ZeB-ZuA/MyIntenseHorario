@@ -1,5 +1,12 @@
 package com.udistrital.myh.Views
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,7 +56,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthCredential
+import com.google.firebase.auth.GoogleAuthProvider
 import com.udistrital.myintensehorario.AppViews
+import com.udistrital.myintensehorario.MainActivity
 import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.R
 import com.udistrital.myintensehorario.Repository.UserRepository
@@ -56,7 +70,7 @@ import com.udistrital.myintensehorario.Service.UserService
 import com.udistrital.myintensehorario.ViewModel.LoginViewModel
 
 @Composable
-fun LoginScreen(navController: NavController,) {
+fun LoginScreen(navController: NavController) {
     val userService = UserService()
     val viewModel = LoginViewModel(userService)
     Surface(
@@ -94,6 +108,8 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
     val signUpPwd: String by viewModel.signUpPwd.observeAsState(initial = "")
     val signUpResult by viewModel.signUpResult.observeAsState(initial = false)
     val logInResult by viewModel.logInResult.observeAsState(initial = false)
+    val token = "999766775802-okvfs44kbt5fu6q5s995thgelfl5r8qb.apps.googleusercontent.com";
+    val context = LocalContext.current
     val isVisiblePwd = rememberSaveable {
         mutableStateOf(false)
     }
@@ -101,14 +117,23 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
         email.trim().isNotEmpty() && pwd.trim().isNotEmpty()
     }
     val showSignUpDialog = remember { mutableStateOf(false) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+       result ->
+        handleGoogleSignInResult(result, viewModel, navController)
+    }
+
+
     LaunchedEffect(signUpResult) {
         if (signUpResult) {
             navController.navigate(AppViews.homeScreen.route)
         }
     }
 
-    LaunchedEffect (logInResult){
-        if (logInResult){
+    LaunchedEffect(logInResult) {
+        if (logInResult) {
             navController.navigate(AppViews.homeScreen.route)
         }
     }
@@ -132,8 +157,8 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
         SubmitButton(
             textId = stringResource(id = R.string.Log_In), isOn = isSubmitOn,
             onClick = {
-           viewModel.logIn()
-          }
+                viewModel.logIn()
+            }
         )
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -179,7 +204,10 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
                             keyboard = KeyboardType.Text,
                             onValueChange = { viewModel.setSignUpName(it) }
                         )
-                        GoogleLoginButton(){}
+                        GoogleLoginButton() {
+                            val signInIntent = getGoogleSignInIntent(context, token)
+                            launcher.launch(signInIntent)
+                        }
                     }
                 },
                 confirmButton = {
@@ -219,7 +247,10 @@ fun UserForm(navController: NavController, viewModel: LoginViewModel) {
                     .height(1.dp)
             )
         }
-        GoogleLoginButton() {}
+        GoogleLoginButton() {
+            val signInIntent = getGoogleSignInIntent(context, token)
+            launcher.launch(signInIntent)
+        }
 
 
     }
@@ -343,6 +374,31 @@ fun InputField(
 
     )
 }
+
+fun getGoogleSignInIntent(context: Context, token: String): Intent {
+    val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestIdToken(token)
+        .requestEmail()
+        .build()
+    val googleSignInClient = GoogleSignIn.getClient(context, options)
+    return googleSignInClient.signInIntent
+}
+fun handleGoogleSignInResult(result: ActivityResult, viewModel: LoginViewModel, navController: NavController) {
+    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+    try {
+        val account = task.getResult(ApiException::class.java)
+        val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+        viewModel.googleLogIn(credential) {
+            navController.navigate(AppViews.homeScreen.route)
+        }
+    } catch (e: ApiException) {
+        Log.d("Auth", "Error google SignUP ${e.localizedMessage}")
+    }
+}
+
+
+
+
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
