@@ -81,20 +81,19 @@ class UserService : UserRepository {
         return ref.child(uid).updateChildren(userMap)
     }
 
-
-        override suspend fun findUserById(uid: String): User? {
-            return try {
-                val userRef = ref.child(uid)
-                val dataSnapshot = userRef.get().await()
-                dataSnapshot.getValue(User::class.java)
-            } catch (e: Exception) {
-                println("Error en findUserById: ${e.message}")
-                null
-            }
+    override suspend fun findUserById(uid: String): User? {
+        return try {
+            val userRef = ref.child(uid)
+            val dataSnapshot = userRef.get().await()
+            dataSnapshot.getValue(User::class.java)
+        } catch (e: Exception) {
+            println("Error en findUserById: ${e.message}")
+            null
         }
-
     }
 
+
+    }
 
 
 
