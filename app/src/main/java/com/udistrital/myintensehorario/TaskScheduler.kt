@@ -46,11 +46,10 @@ class TaskScheduler(private val context: Context) {
         val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, taskStartHour)
-            set(Calendar.MINUTE, taskStartMinute - 5)
+            set(Calendar.MINUTE, taskStartMinute - 2)
         }
         val reminderTime = calendar.timeInMillis
 
-        // Imprimir la hora de inicio de la tarea y la hora de la alarma
         Log.d("TaskScheduler", "Hora de inicio de la tarea: ${task.start}")
         Log.d(
             "TaskScheduler",

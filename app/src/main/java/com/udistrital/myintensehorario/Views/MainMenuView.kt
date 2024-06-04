@@ -63,29 +63,34 @@ import com.udistrital.myintensehorario.Service.UserService
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
     val currentScreen = remember { mutableStateOf("dashboard") }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text(stringResource(id = R.string.app_name),
+                Text(
+                    text = stringResource(id = R.string.app_name),
                     fontSize = 22.sp,
-                    modifier = Modifier.padding(26.dp))
+                    modifier = Modifier.padding(26.dp)
+                )
                 MyNavigationDrawerItem(
-                    stringResource(id = R.string.My_schedule), Icons.Filled.CalendarToday,
-                    stringResource(id = R.string.My_schedules), currentScreen.value == "dashboard"
+                    label = stringResource(id = R.string.My_schedule),
+                    icon = Icons.Filled.CalendarToday,
+                    contentDescription = stringResource(id = R.string.My_schedules),
+                    selected = currentScreen.value == "dashboard"
                 ) {
                     currentScreen.value = "dashboard"
                     scope.launch { drawerState.close() }
                 }
                 MyNavigationDrawerItem(
-                    stringResource(id = R.string.My_settings), Icons.Filled.Settings,
-                    contentDescription = "My schedules", currentScreen.value == "settings"
+                    label = stringResource(id = R.string.My_settings),
+                    icon = Icons.Filled.Settings,
+                    contentDescription = "My settings",
+                    selected = currentScreen.value == "settings"
                 ) {
                     currentScreen.value = "settings"
                     scope.launch { drawerState.close() }
@@ -96,10 +101,36 @@ fun HomeScreen(navController: NavController) {
         // Screen content
         when (currentScreen.value) {
             "dashboard" -> DashBoard(navController)
-            "settings" -> SettingsScreen(navController)
+            "settings" -> SettingsScreen(navController, isDarkTheme = isDarkTheme, onThemeChange = onThemeChange)
         }
     }
 }
+
+@Composable
+fun MyNavigationDrawerItem(
+    label: String,
+    icon: ImageVector,
+    contentDescription: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    NavigationDrawerItem(
+        colors = NavigationDrawerItemDefaults.colors(
+            selectedContainerColor = colorResource(id = R.color.greenLight),
+        ),
+        modifier = Modifier.padding(6.dp),
+        label = { Text(text = label, fontWeight = FontWeight(500)) },
+        icon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription
+            )
+        },
+        selected = selected,
+        onClick = onClick
+    )
+}
+
 
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -232,33 +263,9 @@ fun DashBoard(navController: NavController) {
 @Preview
 fun HomeScreenPreview() {
     val navController = rememberNavController()
-    HomeScreen(navController)
+   // HomeScreen(navController)
 }
 
-@Composable
-fun MyNavigationDrawerItem(
-    label: String,
-    icon: ImageVector,
-    contentDescription: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    NavigationDrawerItem(
-        colors = NavigationDrawerItemDefaults.colors(
-            selectedContainerColor = colorResource(id = R.color.greenLight),
-        ),
-        modifier = Modifier.padding(6.dp),
-        label = { Text(text = label, fontWeight = FontWeight(500)) },
-        icon = {
-            Icon(
-                icon,
-                contentDescription = contentDescription
-            )
-        },
-        selected = selected,
-        onClick = onClick
-    )
-}
 
 fun handleLogOut(navController: NavController) {
     FirebaseAuth.getInstance().signOut()

@@ -40,9 +40,8 @@ private val LightColorScheme = lightColorScheme(
 
 
 @Composable
-fun MyIntenseHorario2Theme(
-    darkTheme: Boolean = false,
-    // Dynamic color is available on Android 12+
+fun MyIntenseHorarioTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

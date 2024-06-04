@@ -19,6 +19,6 @@ class TaskReminderReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.notification_icon)
             .setAutoCancel(true)
             .build()
-        notificationManager.notify(1, notification)
+        notificationManager.notify(1, notification) //no tocar este error
     }
 }

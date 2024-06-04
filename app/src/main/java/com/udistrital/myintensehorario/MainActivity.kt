@@ -7,11 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
-import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.Service.ScheduleService
-import com.udistrital.myintensehorario.Service.UserService
-import com.udistrital.myintensehorario.ui.theme.MyIntenseHorario2Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,9 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         taskScheduler.scheduleTestReminder()
         setContent {
-            MyIntenseHorario2Theme {
-                AppNav()
-            }
+           MyAppMain()
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

@@ -25,6 +25,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -58,13 +59,13 @@ import com.udistrital.myintensehorario.ViewModel.SettingsScreenViewModel
 
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(navController: NavController, isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
     val userService = UserService()
     val viewModel = SettingsScreenViewModel(userService)
     Column() {
         HeaderText()
         ProfileCardUI(navController, viewModel)
-        GeneralOptionsUI(navController)
+        GeneralOptionsUI(isDarkTheme = isDarkTheme, onThemeChange = onThemeChange)
         SupportOptionsUI(navController)
     }
 }
@@ -193,7 +194,7 @@ fun HeaderText() {
 }
 
 @Composable
-fun GeneralOptionsUI(navController: NavController) {
+fun GeneralOptionsUI(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -225,7 +226,9 @@ fun GeneralOptionsUI(navController: NavController) {
                     contentDescription = stringResource(id = R.string.Dark_Theme)
 
                 )
-            }
+            },
+            isDarkTheme = isDarkTheme,
+            onThemeChange = onThemeChange
         )
         GeneralSettingLanguage(
             icon = {
@@ -271,8 +274,7 @@ fun GeneralSettingNotifications(icon: @Composable () -> Unit) {
 }
 
 @Composable
-fun GeneralSettingTheme(icon: @Composable () -> Unit) {
-    var checked by remember { mutableStateOf(false) }
+fun GeneralSettingTheme(icon: @Composable () -> Unit, isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
     Card(
         modifier = Modifier
             .padding(bottom = 8.dp)
@@ -294,8 +296,8 @@ fun GeneralSettingTheme(icon: @Composable () -> Unit) {
             )
             Spacer(Modifier.weight(1f))
             Switch(
-                checked = checked,
-                onCheckedChange = { checked = it }
+                checked = isDarkTheme,
+                onCheckedChange = { onThemeChange(it) }
             )
         }
     }
@@ -517,5 +519,5 @@ fun SupportItem(icon: @Composable () -> Unit, mainText: String, onClick: () -> U
 @Preview(showBackground = true)
 fun SettingsScreenPreview() {
     val navController = rememberNavController()
-    SettingsScreen(navController)
+    //SettingsScreen(navController)
 }
