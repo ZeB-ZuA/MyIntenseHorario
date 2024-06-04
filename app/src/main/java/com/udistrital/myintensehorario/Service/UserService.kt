@@ -93,6 +93,28 @@ class UserService : UserRepository {
     }
 
 
+
+    suspend fun getUserName(uid: String): String? {
+        return try {
+            val userSnapshot = ref.child(uid).get().await()
+            val userName = userSnapshot.child("name").getValue(String::class.java)
+            userName
+        } catch (e: Exception) {
+            println("Error en obtener Nombre: ${e.message}")
+            null
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
