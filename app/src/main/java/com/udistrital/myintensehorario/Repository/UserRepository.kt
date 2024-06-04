@@ -14,8 +14,6 @@ interface UserRepository {
     fun googleLogIn(credential: AuthCredential): Task<AuthResult>
     fun updateName(user: User): Task<Void>
     suspend fun findUserById(uid: String): User?
-
-    fun updateName(user: User): Task<Void>
-     suspend fun findUserById(uid: String): User?
+    
 
 }
