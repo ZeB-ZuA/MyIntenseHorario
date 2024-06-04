@@ -2,6 +2,8 @@ package com.udistrital.myintensehorario2.Views
 
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +34,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,17 +50,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.udistrital.myh.Views.SubmitButton
 import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario.Model.Day
 import com.udistrital.myintensehorario.Model.Enums.DaysEnum
+import com.udistrital.myintensehorario.Model.Schedule
 import com.udistrital.myintensehorario.Model.Task
 import com.udistrital.myintensehorario.R
+import com.udistrital.myintensehorario.Service.ScheduleService
+import com.udistrital.myintensehorario.ViewModel.CreateViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.Calendar
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateScreen(navController: NavController) {
+    val scheduleService = ScheduleService()
+    val viewModel = CreateViewModel(scheduleService)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -91,11 +107,12 @@ fun CreateScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 Spacer(Modifier.size(10.dp))
-                UserForm(navController)
+                UserForm(navController, viewModel)
             }
         }
     }
 }
+
 
 
 @Composable
@@ -105,11 +122,13 @@ fun CreateScreenPreview() {
     CreateScreen(navController)
 }
 
-@Composable
-fun UserForm(navController: NavController) {
-    var scheduleName by rememberSaveable { mutableStateOf("") }
-    val items = DaysEnum.values().toList()
 
+@Composable
+fun UserForm(navController: NavController, viewModel: CreateViewModel) {
+
+    val scheduleName by viewModel.scheduleName.observeAsState(initial = "")
+    val items = DaysEnum.values().toList()
+    val scheduleService = ScheduleService()
     Column(
         modifier = Modifier.padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -122,24 +141,36 @@ fun UserForm(navController: NavController) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = scheduleName,
-            onValueChange = { scheduleName = it },
+            onValueChange = { viewModel.setScheduleName(it)},
             placeholder = { Text(text = stringResource(id = R.string.e_g__Oficina)) },
         )
 
         items.forEach { day ->
-            CheckboxDays(day.toString())
+            CheckboxDays(day.toString(), viewModel )
         }
+        Buttons(
+            navController,
+            onClick = {
 
-        Buttons(navController)
+                viewModel.printAllTasks()
+                CoroutineScope(Dispatchers.IO).launch {
+                 viewModel.save()
+                }
+            },
+            onClick2 = {
+                scheduleService.printSchedulesForCurrentUser()
+                navController.navigate(AppViews.homeScreen.route)
+            }
+        )
+
+
     }
 }
 
 @Composable
-fun CheckboxDays(day: String) {
-    var taskName by rememberSaveable { mutableStateOf("") }
-    var taskDescription by rememberSaveable { mutableStateOf("") }
+fun CheckboxDays(day: String, viewModel: CreateViewModel) {
     val checked = remember { mutableStateOf(false) }
-    val tasks = remember { mutableStateListOf<Pair<String, String>>() }
+    val tasks = viewModel.getTasksForDay(day).observeAsState()
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -154,21 +185,35 @@ fun CheckboxDays(day: String) {
 
     if (checked.value) {
         Column {
-            tasks.forEachIndexed { index, task ->
+            tasks.value?.forEachIndexed { index, task ->
                 TaskRow(
-                    taskName = task.first,
-                    taskDescription = task.second,
+                    taskName = task.name,
+                    taskDescription = task.description,
+                    startTime = task.start,
+                    endTime = task.finish,
                     onTaskNameChange = { newName ->
-                        tasks[index] = tasks[index].copy(first = newName)
+                        viewModel.updateTaskName(day, index, newName)
                     },
                     onTaskDescriptionChange = { newDescription ->
-                        tasks[index] = tasks[index].copy(second = newDescription)
+                        viewModel.updateTaskDescription(day, index, newDescription)
                     },
-                    onRemoveTask = { tasks.removeAt(index) }
+                    onStartTimeChange = { newTime ->
+                        viewModel.updateTaskStartTime(day, index, newTime)
+                    },
+                    onEndTimeChange = { newTime ->
+
+                        viewModel.updateTaskEndTime(day, index, newTime)
+                    },
+                    onRemoveTask = {
+                        viewModel.removeTaskForDay(day, index)
+                        viewModel.printAllTasks()
+                    }
                 )
             }
+
             Button(onClick = {
-                tasks.add(Pair("", ""))
+                viewModel.addTaskForDay(day, Task())
+                viewModel.printAllTasks()
             }) {
                 Text(text = "+")
             }
@@ -176,22 +221,25 @@ fun CheckboxDays(day: String) {
     }
 }
 
+
+
+
 @Composable
-fun Buttons(navController: NavController) {
-    val isSubmitOn = false
+fun Buttons(navController: NavController, onClick: () -> Unit, onClick2: () -> Unit) {
+    val isSubmitOn = true
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         SubmitButton(
             textId = stringResource(id = R.string.Save), isOn = isSubmitOn,
-            onClick = { navController.navigate(AppViews.homeScreen.route) }
+            onClick = { onClick() }
         )
 
     }
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = { navController.navigate(AppViews.homeScreen.route) },
+        onClick = { onClick2() },
     ) {
         Text(text = stringResource(id = R.string.Cancel))
     }
@@ -201,20 +249,22 @@ fun Buttons(navController: NavController) {
 fun TaskRow(
     taskName: String,
     taskDescription: String,
+    startTime: String,
+    endTime: String,
     onTaskNameChange: (String) -> Unit,
     onTaskDescriptionChange: (String) -> Unit,
+    onStartTimeChange: (String) -> Unit,
+    onEndTimeChange: (String) -> Unit,
     onRemoveTask: () -> Unit
 ) {
-    var startTime by rememberSaveable { mutableStateOf("00:00") }
-    var endTime by rememberSaveable { mutableStateOf("00:00") }
     val context = LocalContext.current
 
     val startTimePickerDialog = createTimePickerDialog(context, startTime) { time ->
-        startTime = time
+        onStartTimeChange(time)
     }
 
     val endTimePickerDialog = createTimePickerDialog(context, endTime) { time ->
-        endTime = time
+        onEndTimeChange(time)
     }
 
     Row {

@@ -38,7 +38,7 @@ class LoginViewModel(private val userService: UserService? = null) : ViewModel()
             if (task.isSuccessful) {
                 onSuccess()
             } else {
-                // Maneja el error aquí
+
             }
         }
     }

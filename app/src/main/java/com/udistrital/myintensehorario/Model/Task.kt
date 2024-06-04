@@ -1,17 +1,19 @@
 package com.udistrital.myintensehorario.Model
 
 
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 
 data class Task(
-    val id: String,
-    val name: String,
-    val start: LocalDateTime,
-    val finish: LocalDateTime,
-    val description: String
+    var id: String = "",
+    val name: String = "",
+    val start: String = "00:00",
+    val finish: String = "00:00",
+    val description: String = ""
 )
 
  {
-
+     override fun toString(): String {
+         return "Task(id='$id', name='$name', start='$start', finish='$finish', description='$description')"
+     }
 }
