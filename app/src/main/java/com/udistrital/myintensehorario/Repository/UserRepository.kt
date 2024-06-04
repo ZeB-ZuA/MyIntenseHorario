@@ -12,4 +12,7 @@ interface UserRepository {
     fun logIn(email: String, password: String): Task<AuthResult>
     fun googleLogIn(credential: AuthCredential): Task<AuthResult>
 
+    fun updateName(user: User): Task<Void>
+     suspend fun findUserById(uid: String): User?
+
 }
