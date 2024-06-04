@@ -1,20 +1,16 @@
 package com.udistrital.myintensehorario2.Views
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,8 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -39,17 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.udistrital.myintensehorario.AppViews
-import com.udistrital.myintensehorario.Model.Schedule
 import com.udistrital.myintensehorario.R
-import com.udistrital.myintensehorario.Service.ScheduleService
-import com.udistrital.myintensehorario.ViewModel.ScheduleListScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleListScreen(navController: NavController,) {
-    val scheduleService = ScheduleService()
-    val viewModel = ScheduleListScreenViewModel(scheduleService)
-    val schedules by viewModel.schedules.observeAsState(emptyList())
+fun ScheduleListScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -76,35 +64,23 @@ fun ScheduleListScreen(navController: NavController,) {
 
                 )
         }
-    ) { innerPadding ->
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)) {
+    ){ innerPadding ->
+        Surface(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(innerPadding),
             ) {
-                schedules.forEach { schedule ->
-                    ScheduleCard(schedule = schedule, onClick = {
-                        navController.navigate(AppViews.scheduleScreen.route)
-                    }, onDeleteClick = {
-                       
-                       viewModel.delete(schedule)
-                    },
-                        onUpdateClick = {
-                            TODO("LOGICA PARA ACTUALIZAR")
-                        })
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(Modifier.size(10.dp))
+                Surface(onClick = {  navController.navigate(AppViews.scheduleScreen.route) }) {
+                    Card()
                 }
-                Button(onClick = { navController.navigate(AppViews.createScreen.route) }) {
-                    Text(text = "+")
-                }
-            }
         }
+
     }
-}
+
+}}
 
 @Composable
-fun ScheduleCard(schedule: Schedule, onClick: () -> Unit, onDeleteClick: () -> Unit, onUpdateClick: () -> Unit) {
+fun Card(){
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.greenLight),
@@ -115,7 +91,6 @@ fun ScheduleCard(schedule: Schedule, onClick: () -> Unit, onDeleteClick: () -> U
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
-            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier
@@ -124,32 +99,46 @@ fun ScheduleCard(schedule: Schedule, onClick: () -> Unit, onDeleteClick: () -> U
             Icon(
                 tint = colorResource(id = R.color.black),
                 painter = painterResource(R.drawable.calendar),
-                contentDescription = ""
-            )
+                contentDescription = "" )
             Text(
-                text = schedule.name ?: "Unnamed Schedule",
+                text = stringResource(id = R.string.Office),
                 color = Color.Black,
                 fontWeight = FontWeight.Black,
                 fontSize = 22.sp,
                 textAlign = TextAlign.Center,
             )
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.width(180.dp))
 
             Icon(
-                tint = colorResource(id = R.color.black),
-                painter = painterResource(R.drawable.edit_calendar),
-                contentDescription = "",
-                modifier = Modifier.clickable(onClick = onUpdateClick)
-            )
+                    tint = colorResource(id = R.color.black),
+                    painter = painterResource(R.drawable.edit_calendar),
+                    contentDescription = "" )
             Spacer(Modifier.width(10.dp))
             Icon(
-                tint = colorResource(id = R.color.black),
-                painter = painterResource(R.drawable.delete),
-                contentDescription = "",
-                modifier = Modifier.clickable(onClick = onDeleteClick)
+                    tint = colorResource(id = R.color.black),
+                    painter = painterResource(R.drawable.delete),
+                    contentDescription = "" )
+
+        }
+
+        Row {
+
+            Text(
+                text = stringResource(id = R.string.Monday),
+                modifier = Modifier
+                    .padding(16.dp),
+                textAlign = TextAlign.Center,
+            )
+
+            Text(
+                text = stringResource(id = R.string.tuesday),
+                modifier = Modifier
+                    .padding(16.dp),
+                textAlign = TextAlign.Center,
             )
         }
+
     }
 }
 

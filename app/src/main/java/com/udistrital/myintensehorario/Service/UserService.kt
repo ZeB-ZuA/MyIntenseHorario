@@ -62,7 +62,6 @@ class UserService : UserRepository {
                         "uid" to uid,
                         "name" to firebaseUser.displayName,
                         "email" to firebaseUser.email,
-                        "fcmToken" to ""
                     )
                     ref.child(uid).setValue(userMap)
                 }
