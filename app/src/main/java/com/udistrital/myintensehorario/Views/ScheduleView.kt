@@ -198,7 +198,11 @@ fun ViewDays( day: Day){
                             Text(text =  task.finish)
                         }
                         Spacer(Modifier.size(10.dp))
-                        Text(text = task.name)
+                        Column {
+                            Text(text = task.name.capitalize(),  fontWeight = FontWeight.Bold,fontSize = 18.sp,)
+                            Text(text = task.description.capitalize())
+                        }
+
                     }
 
 
