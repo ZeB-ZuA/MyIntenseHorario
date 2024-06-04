@@ -8,11 +8,15 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.Repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.tasks.await
+
 class UserService : UserRepository {
     private val db = Firebase.database
     private val ref = db.getReference("users")
@@ -77,20 +81,19 @@ class UserService : UserRepository {
         return ref.child(uid).updateChildren(userMap)
     }
 
-
-        override suspend fun findUserById(uid: String): User? {
-            return try {
-                val userRef = ref.child(uid)
-                val dataSnapshot = userRef.get().await()
-                dataSnapshot.getValue(User::class.java)
-            } catch (e: Exception) {
-                println("Error en findUserById: ${e.message}")
-                null
-            }
+    override suspend fun findUserById(uid: String): User? {
+        return try {
+            val userRef = ref.child(uid)
+            val dataSnapshot = userRef.get().await()
+            dataSnapshot.getValue(User::class.java)
+        } catch (e: Exception) {
+            println("Error en findUserById: ${e.message}")
+            null
         }
-
     }
 
+
+    }
 
 
 
