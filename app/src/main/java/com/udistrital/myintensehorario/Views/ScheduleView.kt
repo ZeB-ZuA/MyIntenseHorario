@@ -55,10 +55,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.udistrital.myintensehorario.AppViews
+import com.udistrital.myintensehorario.Model.Day
 import com.udistrital.myintensehorario.Model.Schedule
+import com.udistrital.myintensehorario.Model.Task
 import com.udistrital.myintensehorario.R
 import com.udistrital.myintensehorario.Service.ScheduleService
 import java.util.Calendar
+
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,11 +75,15 @@ fun ScheduleScreen(navController: NavController, id: String?) {
         schedule = scheduleService.getScheduleById(id)
     }
 
-    println("HORARIO RESIVIDO EN LOS DETALLES" + schedule.toString())
+    println("HORARIO RECIBIDO EN LOS DETALLES" + (schedule?.days ?: ""))
 
-    val items: Array<String> = arrayOf(
-        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-    )
+    val items: MutableList<Day> =  mutableListOf()
+    if(schedule?.days != null) {
+    for (day in schedule?.days!!) {
+        items.add(day)
+    }}
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -119,6 +128,7 @@ fun ScheduleScreen(navController: NavController, id: String?) {
                         .padding(horizontal = 10.dp)
                 )
                 items.forEach { days ->
+
                     ViewDays(days)
                     }
 
@@ -132,8 +142,10 @@ fun ScheduleScreen(navController: NavController, id: String?) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewDays( day: String){
+fun ViewDays( day: Day){
    // var selected = remember { mutableStateOf(false) }
+    var name = day.name.toString();
+    var tasks: MutableList<Task> = day.tasks;
     var selected by remember { mutableStateOf(false) }
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -144,7 +156,7 @@ fun ViewDays( day: String){
                 .fillMaxWidth(),
             onClick = { selected = !selected },
             label = {
-                Text(day)
+                Text(name)
             },
             colors = FilterChipDefaults.filterChipColors(
                 selectedContainerColor = colorResource(id = R.color.green)
@@ -164,32 +176,35 @@ fun ViewDays( day: String){
         )
     }
     if(selected) {
-        Column {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(1.dp)
-                    .border(BorderStroke(1.dp, colorResource(id = R.color.green))),
+        tasks.forEach { task ->
+            Column {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(1.dp)
+                        .border(BorderStroke(1.dp, colorResource(id = R.color.green))),
 
-                ){
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-                 Column {
-                        Text(text = "01:00 pm")
-                        Spacer(Modifier.size(3.dp))
-                        Text(text =  "03:00 pm")
-                 }
-                Spacer(Modifier.size(10.dp))
-                Text(text = "Fisica")
+                    ){
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    ) {
+                        Column {
+                            Text(text = task.start)
+                            Spacer(Modifier.size(3.dp))
+                            Text(text =  task.finish)
+                        }
+                        Spacer(Modifier.size(10.dp))
+                        Text(text = task.name)
+                    }
+
+
                 }
-
-
+                Spacer(Modifier.size(10.dp))
             }
-            Spacer(Modifier.size(10.dp))
         }
+
     }
 }
 

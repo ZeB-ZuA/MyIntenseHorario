@@ -50,6 +50,7 @@ fun ScheduleListScreen(navController: NavController,) {
     val scheduleService = ScheduleService()
     val viewModel = ScheduleListScreenViewModel(scheduleService)
     val schedules by viewModel.schedules.observeAsState(emptyList())
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -85,7 +86,7 @@ fun ScheduleListScreen(navController: NavController,) {
             ) {
                 schedules.forEach { schedule ->
                     ScheduleCard(schedule = schedule, onClick = {
-                        println("ID del hoario a datelles" + schedule.id)
+                        println("ID del horario a detalles" + schedule.id)
                         val action = "${AppViews.scheduleScreen.route}/${schedule.id}"
                         navController.navigate(action)
                     }, onDeleteClick = {
@@ -131,7 +132,7 @@ fun ScheduleCard(schedule: Schedule, onClick: () -> Unit, onDeleteClick: () -> U
             Text(
                 text = schedule.name ?: "Unnamed Schedule",
                 color = Color.Black,
-                fontWeight = FontWeight.Black,
+                fontWeight = FontWeight.Medium,
                 fontSize = 22.sp,
                 textAlign = TextAlign.Center,
             )

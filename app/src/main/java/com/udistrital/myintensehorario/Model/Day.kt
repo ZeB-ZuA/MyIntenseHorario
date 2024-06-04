@@ -4,7 +4,7 @@ import com.udistrital.myintensehorario.Model.Enums.DaysEnum
 
 
 data class Day(
-    val name: DaysEnum = DaysEnum.MONDAY,
+    val name: Any = DaysEnum.MONDAY,
     var tasks: MutableList<Task> = mutableListOf()
 ){
 

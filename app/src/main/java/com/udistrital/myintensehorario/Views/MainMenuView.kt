@@ -146,7 +146,7 @@ fun DashBoard(navController: NavController) {
 
     coroutineScope.launch {
         userName = uid?.let { userService.getUserName(it) }
-        weather = WeatherRetrofitSua.weatherApi.getWeather().weather[0].main.toString()
+        //weather = WeatherRetrofitSua.weatherApi.getWeather().weather[0].main.toString()
     }
     Column (
             modifier = Modifier
