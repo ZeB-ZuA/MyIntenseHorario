@@ -5,7 +5,6 @@ import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -59,13 +58,9 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.udistrital.myintensehorario.AppViews
-import com.udistrital.myintensehorario.MainActivity
-import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.R
-import com.udistrital.myintensehorario.Repository.UserRepository
 import com.udistrital.myintensehorario.Service.UserService
 import com.udistrital.myintensehorario.ViewModel.LoginViewModel
 
