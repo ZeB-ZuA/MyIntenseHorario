@@ -38,6 +38,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,12 +55,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.udistrital.myintensehorario.AppViews
+import com.udistrital.myintensehorario.Model.Schedule
 import com.udistrital.myintensehorario.R
+import com.udistrital.myintensehorario.Service.ScheduleService
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleScreen(navController: NavController) {
+fun ScheduleScreen(navController: NavController, id: String?) {
+    val scheduleService = ScheduleService()
+
+    var schedule by remember { mutableStateOf<Schedule?>(null) }
+    LaunchedEffect(id) {
+        schedule = scheduleService.getScheduleById(id)
+    }
+
+    println("HORARIO RESIVIDO EN LOS DETALLES" + schedule.toString())
+
     val items: Array<String> = arrayOf(
         "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
     )
@@ -99,7 +111,7 @@ fun ScheduleScreen(navController: NavController) {
                 Spacer(Modifier.size(50.dp))
                 Text(
                     textAlign = TextAlign.Center,
-                    text = stringResource(R.string.Office),
+                    text = schedule?.name ?: "Loading..",
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp,
                     modifier = Modifier

@@ -42,12 +42,12 @@ class ScheduleService : ScheduleRepository {
     }
 
 
-    override suspend fun getScheduleById(id: String): Schedule? {
+    override suspend fun getScheduleById(id: String?): Schedule? {
         val user = auth.currentUser
         return if (user != null) {
             try {
-                val snapshot = schedulesRef.child(user.uid).child(id).get().await()
-                snapshot.getValue(Schedule::class.java)
+                val snapshot = id?.let { schedulesRef.child(user.uid).child(it).get().await() }
+                snapshot?.getValue(Schedule::class.java)
             } catch (e: Exception) {
                 null
             }

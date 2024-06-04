@@ -85,7 +85,9 @@ fun ScheduleListScreen(navController: NavController,) {
             ) {
                 schedules.forEach { schedule ->
                     ScheduleCard(schedule = schedule, onClick = {
-                        navController.navigate(AppViews.scheduleScreen.route)
+                        println("ID del hoario a datelles" + schedule.id)
+                        val action = "${AppViews.scheduleScreen.route}/${schedule.id}"
+                        navController.navigate(action)
                     }, onDeleteClick = {
                        
                        viewModel.delete(schedule)

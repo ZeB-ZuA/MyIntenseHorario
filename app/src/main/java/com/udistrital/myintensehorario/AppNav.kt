@@ -48,8 +48,10 @@ fun AppNav(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
             ScheduleListScreen(navController)
         }
 
-        composable(route = AppViews.scheduleScreen.route) {
-            ScheduleScreen(navController)
+        composable(route = AppViews.scheduleScreen.route+"/{id}") {backStackEntry ->
+            val arguments = requireNotNull(backStackEntry.arguments)
+            val id = arguments.getString("id")
+            ScheduleScreen(navController, id)
         }
 
         composable(route = AppViews.settingsScreen.route) {
