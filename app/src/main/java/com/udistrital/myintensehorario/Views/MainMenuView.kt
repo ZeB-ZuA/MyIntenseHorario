@@ -1,6 +1,7 @@
 package com.udistrital.myh.Views
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 
@@ -20,7 +21,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,14 +35,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -58,8 +58,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario.Views.SettingsScreen
 import com.udistrital.myintensehorario.R
+import com.udistrital.myintensehorario.Repository.WeatherRetrofitSua
+import com.udistrital.myintensehorario.Service.UserService
 import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.JdkConstants.FontStyle
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -101,10 +102,22 @@ fun HomeScreen(navController: NavController) {
 }
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashBoard(navController: NavController) {
-        Column (
+    val userService = UserService()
+    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    val uid = auth.currentUser?.uid
+    val coroutineScope = rememberCoroutineScope()
+    var userName by remember { mutableStateOf<String?>(null) }
+    var weather by remember { mutableStateOf<String?>(null) }
+
+    coroutineScope.launch {
+        userName = uid?.let { userService.getUserName(it) }
+        weather = WeatherRetrofitSua.weatherApi.getWeather().weather[0].main.toString()
+    }
+    Column (
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
@@ -142,14 +155,14 @@ fun DashBoard(navController: NavController) {
 
             ) {
                 Text(
-                    text = stringResource(id = R.string.Hi_User),
+                    text = stringResource(id = R.string.Hi_User) + ", "+(userName ?: "loading..."),
                     color =  colorResource(R.color.green),
                     textAlign = TextAlign.Left,
                     fontSize = 30.sp,
                     fontWeight = FontWeight(600),
                 )
                 Text(
-                    text = stringResource(id = R.string.Weather),
+                    text = weather ?: "loading...",
                     color =  colorResource(R.color.greenLight),
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight(600)
@@ -161,9 +174,20 @@ fun DashBoard(navController: NavController) {
                         .background(colorResource(R.color.yellow),),
                     contentAlignment = Alignment.Center
                 ){
-                    Image(painter = painterResource(id = R.drawable.cloudy), contentDescription = "weather")
+                    val weatherImage = when (weather) {
+                        "Thunderstorm" -> R.drawable.thunderstorm
+                        "Drizzle" -> R.drawable.drizzle
+                        "Rain" -> R.drawable.rain
+                        "Snow" -> R.drawable.snow
+                        "Atmosphere" -> R.drawable.atmosphere
+                        "Clear" -> R.drawable.clear
+                        "Clouds" -> R.drawable.clouds
+                        else -> R.drawable.clear
+                    }
+                    Image(painter = painterResource(id = weatherImage), contentDescription = "weather"
+                    )
                     Text(
-                        text = "26°c",
+                        text =weather ?: "loading...",
                         fontSize = 27.sp,
                         textAlign = TextAlign.Center,
                         color = Color.White,
