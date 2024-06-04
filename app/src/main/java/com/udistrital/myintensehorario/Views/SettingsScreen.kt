@@ -29,10 +29,12 @@ import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,27 +48,135 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.R
+import com.udistrital.myintensehorario.Service.UserService
+import com.udistrital.myintensehorario.ViewModel.SettingsScreenViewModel
 
 
 @Composable
 fun SettingsScreen(navController: NavController) {
+    val userService = UserService()
+    val viewModel = SettingsScreenViewModel(userService)
     Column() {
         HeaderText()
-        ProfileCardUI(navController)
+        ProfileCardUI(navController, viewModel)
         GeneralOptionsUI(navController)
         SupportOptionsUI(navController)
     }
 }
 
+
+
+
 @Composable
-@Preview(showBackground = true)
-fun SettingsScreenPreview() {
-    val navController = rememberNavController()
-    SettingsScreen(navController)
+fun ProfileCardUI(navController: NavController, viewModel: SettingsScreenViewModel) {
+    val user by viewModel.user.observeAsState()
+    val showDialog = remember { mutableStateOf(false) }
+    var updatedName by remember { mutableStateOf("") }
+
+    println("USER QUE LE LLEGA A PROFILE CARD: $user")
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .padding(10.dp),
+        elevation = cardElevation(defaultElevation = 4.dp),
+    ) {
+        Row(
+            modifier = Modifier.padding(20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = stringResource(id = R.string.Check_Your_Profile),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+
+                if (user != null) {
+                    Text(
+                        text = user!!.email,
+                        color = Color.Gray,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                } else {
+                    Text(
+                        text = "Loading...",
+                        color = Color.Gray,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+
+                Button(
+                    modifier = Modifier.padding(top = 10.dp),
+                    onClick = { showDialog.value = true },
+                    colors = ButtonDefaults.buttonColors(),
+                    contentPadding = PaddingValues(horizontal = 30.dp),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 0.dp,
+                        pressedElevation = 2.dp
+                    ),
+                    shape = CircleShape
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.View),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+    }
+
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = {
+                Text(text = "User Datils")
+            },
+            text = {
+                Column {
+                    Text(text = "Email: ${user?.email ?: "Loading..."}")
+
+                    Spacer(modifier = Modifier.height(10.dp))
+                    OutlinedTextField(
+                        value = updatedName,
+                        onValueChange = { updatedName = it },
+                        label = { Text("Name: ${user?.name ?: "Loading"}") }
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (user != null && updatedName.isNotBlank()) {
+                            val updatedUser = user!!.copy(name = updatedName)
+                            viewModel.updateName(updatedUser)
+                            showDialog.value = false
+                        }
+                    }
+                ) {
+                    Text(text = "Update")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog.value = false }
+                ) {
+                    Text(text = stringResource(id = R.string.Cancel))
+                }
+            }
+        )
+    }
 }
+
 
 @Composable
 fun HeaderText() {
@@ -80,62 +190,6 @@ fun HeaderText() {
         fontWeight = FontWeight.ExtraBold,
         fontSize = 16.sp
     )
-}
-
-@Composable
-fun ProfileCardUI(navController: NavController) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .padding(10.dp),
-        elevation = cardElevation(defaultElevation = 4.dp),
-    ) {
-        Row(
-            modifier = Modifier.padding(20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column() {
-                Text(
-                    text = stringResource(id = R.string.Check_Your_Profile),
-                    //color = SecondaryColor,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-
-                Text(
-                    text = "Sebas@gmail.com",
-
-                    color = Color.Gray,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.SemiBold,
-                )
-
-                Button(
-                    modifier = Modifier.padding(top = 10.dp),
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(
-                        //backgroundColor = PrimaryColor
-                    ),
-                    contentPadding = PaddingValues(horizontal = 30.dp),
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 0.dp,
-                        pressedElevation = 2.dp
-                    ),
-                    shape = CircleShape
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.View),
-
-                        // color = SecondaryColor,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-
-        }
-    }
 }
 
 @Composable
@@ -459,3 +513,9 @@ fun SupportItem(icon: @Composable () -> Unit, mainText: String, onClick: () -> U
     }
 }
 
+@Composable
+@Preview(showBackground = true)
+fun SettingsScreenPreview() {
+    val navController = rememberNavController()
+    SettingsScreen(navController)
+}
