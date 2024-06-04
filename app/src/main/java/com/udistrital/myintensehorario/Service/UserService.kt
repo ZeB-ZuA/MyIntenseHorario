@@ -69,6 +69,7 @@ class UserService : UserRepository {
     }
 
 
+<<<<<<< HEAD
     override suspend fun findUserById(uid: String): User? {
         return try {
             val userRef = ref.child(uid)
@@ -92,3 +93,7 @@ class UserService : UserRepository {
     }
 
     }
+=======
+
+}
+>>>>>>> parent of 1bc1e13 (Merge branch 'Develop' into feature/notificacions)
