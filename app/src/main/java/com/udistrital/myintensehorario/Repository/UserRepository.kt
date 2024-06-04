@@ -11,5 +11,6 @@ interface UserRepository {
     fun signUp(user: User): Task<AuthResult>
     fun logIn(email: String, password: String): Task<AuthResult>
     fun googleLogIn(credential: AuthCredential): Task<AuthResult>
+    suspend fun findUserById(uid: String): User?
 
 }

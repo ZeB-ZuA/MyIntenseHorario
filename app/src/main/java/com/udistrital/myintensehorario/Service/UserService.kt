@@ -12,6 +12,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.Repository.UserRepository
+import kotlinx.coroutines.tasks.await
 
 class UserService : UserRepository {
     private val db = Firebase.database
@@ -69,17 +70,7 @@ class UserService : UserRepository {
     }
 
 
-<<<<<<< HEAD
-    override suspend fun findUserById(uid: String): User? {
-        return try {
-            val userRef = ref.child(uid)
-            val dataSnapshot = userRef.get().await()
-            dataSnapshot.getValue(User::class.java)
-        } catch (e: Exception) {
-            println("Error en findUserById: ${e.message}")
-            null
-        }
-    }
+
 
     override suspend fun findUserById(uid: String): User? {
         return try {
@@ -93,7 +84,6 @@ class UserService : UserRepository {
     }
 
     }
-=======
 
-}
->>>>>>> parent of 1bc1e13 (Merge branch 'Develop' into feature/notificacions)
+
+
