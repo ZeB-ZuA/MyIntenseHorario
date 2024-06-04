@@ -79,7 +79,9 @@ fun ScheduleScreen(navController: NavController, id: String?) {
 
     val items: MutableList<Day> =  mutableListOf()
     if(schedule?.days != null) {
+
     for (day in schedule?.days!!) {
+        if(day.tasks.size != 0)
         items.add(day)
     }}
 
