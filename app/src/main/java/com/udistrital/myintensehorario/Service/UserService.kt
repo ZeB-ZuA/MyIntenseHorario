@@ -33,6 +33,7 @@ class UserService : UserRepository {
                         "uid" to uid,
                         "name" to user.name,
                         "email" to user.email,
+                        "fcmToken" to ""
                     )
                     ref.child(uid).setValue(userMap)
                 }
@@ -54,13 +55,10 @@ class UserService : UserRepository {
                 val firebaseUser = task.result?.user
                 val uid = firebaseUser?.uid
                 if (uid != null) {
-                    val userMap = mapOf(
-                        "uid" to uid,
-                        "name" to firebaseUser.displayName,
-                        "email" to firebaseUser.email,
-                        "fcmToken" to ""
-                    )
-                    ref.child(uid).setValue(userMap)
+                    val userRef = ref.child(uid)
+                    userRef.child("uid").setValue(uid)
+                    userRef.child("name").setValue(firebaseUser.displayName)
+                    userRef.child("email").setValue(firebaseUser.email)
                 }
             } else {
                 println("Error: ${task.exception?.message}")
@@ -68,6 +66,7 @@ class UserService : UserRepository {
         }
         return authTask
     }
+
 
 
 }
