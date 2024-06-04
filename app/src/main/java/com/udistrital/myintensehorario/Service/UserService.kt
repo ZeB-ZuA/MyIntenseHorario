@@ -8,10 +8,14 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.udistrital.myintensehorario.Model.User
 import com.udistrital.myintensehorario.Repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.tasks.await
 
 class UserService : UserRepository {
     private val db = Firebase.database
@@ -33,6 +37,7 @@ class UserService : UserRepository {
                         "uid" to uid,
                         "name" to user.name,
                         "email" to user.email,
+                        "fcmToken" to ""
                     )
                     ref.child(uid).setValue(userMap)
                 }
@@ -54,12 +59,10 @@ class UserService : UserRepository {
                 val firebaseUser = task.result?.user
                 val uid = firebaseUser?.uid
                 if (uid != null) {
-                    val userMap = mapOf(
-                        "uid" to uid,
-                        "name" to firebaseUser.displayName,
-                        "email" to firebaseUser.email,
-                    )
-                    ref.child(uid).setValue(userMap)
+                    val userRef = ref.child(uid)
+                    userRef.child("uid").setValue(uid)
+                    userRef.child("name").setValue(firebaseUser.displayName)
+                    userRef.child("email").setValue(firebaseUser.email)
                 }
             } else {
                 println("Error: ${task.exception?.message}")
@@ -68,5 +71,20 @@ class UserService : UserRepository {
         return authTask
     }
 
+    override fun updateName(user: User): Task<Void> {
+        val uid = user.uid
+        val userMap = mapOf(
+            "uid" to uid,
+            "name" to user.name,
+            "email" to user.email,
+        )
+        return ref.child(uid).updateChildren(userMap)
+    }
 
 }
+
+
+    }
+
+
+
