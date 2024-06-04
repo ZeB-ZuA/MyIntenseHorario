@@ -44,7 +44,7 @@ class LoginViewModel(private val userService: UserService? = null) : ViewModel()
     }
 
     fun signUp() {
-        val user = User("", _signUpName.value!!, _signUpEmail.value!!, _signUpPwd.value!!)
+        val user = User("", _signUpName.value!!, _signUpEmail.value!!, _signUpPwd.value!!, "")
         userService?.signUp(user)?.addOnCompleteListener { task ->
             _signUpResult.value = task.isSuccessful
         }

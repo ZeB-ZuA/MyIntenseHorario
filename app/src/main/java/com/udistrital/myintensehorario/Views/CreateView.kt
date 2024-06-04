@@ -60,6 +60,7 @@ import com.udistrital.myintensehorario.Model.Schedule
 import com.udistrital.myintensehorario.Model.Task
 import com.udistrital.myintensehorario.R
 import com.udistrital.myintensehorario.Service.ScheduleService
+import com.udistrital.myintensehorario.TaskScheduler
 import com.udistrital.myintensehorario.ViewModel.CreateViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -129,6 +130,7 @@ fun UserForm(navController: NavController, viewModel: CreateViewModel) {
     val scheduleName by viewModel.scheduleName.observeAsState(initial = "")
     val items = DaysEnum.values().toList()
     val scheduleService = ScheduleService()
+    val context = LocalContext.current
     Column(
         modifier = Modifier.padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -154,6 +156,7 @@ fun UserForm(navController: NavController, viewModel: CreateViewModel) {
 
                 viewModel.printAllTasks()
                 CoroutineScope(Dispatchers.IO).launch {
+                    TaskScheduler(context).scheduleAllTasks(scheduleService.getSchedulesForCurrentUser())
                  viewModel.save()
                 }
             },
