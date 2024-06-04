@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.udistrital.myintensehorario"
-        minSdk = 26
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -80,7 +80,6 @@ dependencies {
     implementation("com.google.gms:google-services:4.4.1")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
-    implementation("com.google.firebase:firebase-messaging-ktx")
 
     //Testing
     testImplementation("junit:junit:4.13.2")

@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.udistrital.myintensehorario.AppViews
 import com.udistrital.myintensehorario.Views.SettingsScreen
 import com.udistrital.myintensehorario.R
@@ -121,7 +122,7 @@ fun DashBoard(navController: NavController) {
                     modifier = Modifier.width(50.dp)
                 )},
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { handleLogOut(navController) }) {
                         Icon(
                             modifier = Modifier.size(60.dp),
                             imageVector = Icons.Filled.SupervisedUserCircle,
@@ -234,3 +235,9 @@ fun MyNavigationDrawerItem(
         onClick = onClick
     )
 }
+
+fun handleLogOut(navController: NavController) {
+    FirebaseAuth.getInstance().signOut()
+    navController.navigate(AppViews.loginScreen.route)
+}
+
